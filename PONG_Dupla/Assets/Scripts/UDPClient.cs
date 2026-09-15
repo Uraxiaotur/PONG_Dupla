@@ -30,7 +30,7 @@ public class UdpClientWithId : MonoBehaviour {
         // Movimenta o cubo local
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-        localCube.transform.Translate(new Vector3(h, v, 0) * Time.deltaTime * 5);
+        localCube.transform.Translate(new Vector3(0, v, 0) * (Time.deltaTime * 5));
 
         // Envia posição formatada
         string msg = "POS:" +

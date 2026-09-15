@@ -1,17 +1,12 @@
 using UnityEngine;
 
-public enum pToStart
-{
-    None,
-    P1,
-    P2
-}
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public static int P1Points;
-    public static int P2Points;
-    public static pToStart pToStart;
+    
+    public int P1Points;
+    public int P2Points;
+    public pToStart pToStart;
 
     private bool gameStarted;
     void Awake()

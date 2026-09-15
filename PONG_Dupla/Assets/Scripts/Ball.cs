@@ -5,12 +5,14 @@ public class Ball : MonoBehaviour
     [SerializeField] private Vector2 direction;
     [SerializeField] private float speed;
 
+    private float ogSpeed;
     private bool inMovement;
     private Rigidbody2D rb;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     
     void Start()
     {
+        ogSpeed = speed;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -52,11 +54,11 @@ public class Ball : MonoBehaviour
         }
         else if (GameManager.Instance.GetScoredPlayer() == pToStart.P1)
         {
-            direction = new Vector2(-1f, Random.Range(-1f, 1f));   
+            direction = new Vector2(1f, Random.Range(-1f, 1f));   
         }
         else if (GameManager.Instance.GetScoredPlayer() == pToStart.P2)
         {
-            direction = new Vector2(1f, Random.Range(-1f, 1f));   
+            direction = new Vector2(-1f, Random.Range(-1f, 1f));   
         }
     }
 
@@ -74,13 +76,21 @@ public class Ball : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Score1"))
         {
-            direction = Vector2.zero;
+            Debug.Log("P2 Pontuou");
+            rb.linearVelocity = Vector2.zero;
             GameOM.OnPlayerScored(pToStart.P1, 1);
+            transform.position = new Vector2(0f, 0f);
+            inMovement = false;
+            speed = ogSpeed;
         }
         else if (collision.gameObject.CompareTag("Score2"))
         {
-            direction = Vector2.zero;
+            Debug.Log("P1 Pontuou");
+            rb.linearVelocity = Vector2.zero;
             GameOM.OnPlayerScored(pToStart.P2, 1);
+            transform.position = new Vector2(0f, 0f);
+            inMovement = false;
+            speed = ogSpeed;
         }
     }
     
