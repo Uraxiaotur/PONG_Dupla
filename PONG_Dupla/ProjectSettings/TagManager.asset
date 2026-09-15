@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Score1
   - Score2
+  - Parede
   layers:
   - Default
   - TransparentFX
