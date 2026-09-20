@@ -1288,8 +1288,8 @@ GameObject:
   - component: {fileID: 484039877}
   - component: {fileID: 484039876}
   - component: {fileID: 484039878}
-  - component: {fileID: 484039879}
   - component: {fileID: 484039880}
+  - component: {fileID: 484039881}
   m_Layer: 0
   m_Name: Pl1
   m_TagString: Player
@@ -1418,19 +1418,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &484039879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 484039875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94bd6b18f4d56384897fb5bc8a6713ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UdpClientWithId
-  localCube: {fileID: 484039875}
 --- !u!50 &484039880
 Rigidbody2D:
   serializedVersion: 5
@@ -1458,6 +1445,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 5
+--- !u!114 &484039881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484039875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb4ceff8f2edfa543aefbdab71fe3fee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UdpClientTwoClients
+  localCube: {fileID: 484039875}
+  remoteCube: {fileID: 350338741}
+  localBall: {fileID: 547779547}
 --- !u!1 &547779547
 GameObject:
   m_ObjectHideFlags: 0
