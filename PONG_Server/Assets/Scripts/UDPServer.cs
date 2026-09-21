@@ -57,8 +57,8 @@ public class UdpServerTwoClients : MonoBehaviour
             {
                 string coords = msg.Substring(5);
                 string[] parts = coords.Split(';');
-                float x = float.Parse(parts[0], CultureInfo.InvariantCulture);
-                float y = float.Parse(parts[1], CultureInfo.InvariantCulture);
+                string x = parts[0];
+                string y = parts[1];
 
                 string broadcast = $"BPOS: {x}; {y}";
                 byte[] bdata = Encoding.UTF8.GetBytes(broadcast);

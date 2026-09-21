@@ -55,7 +55,7 @@ public class UdpClientTwoClients : MonoBehaviour {
 
         if (myId != 1)
         {
-            localBall.transform.position = Vector3.Lerp(localBall.transform.position, new Vector3(-ballX,ballY , 0), Time.deltaTime * 10f);
+            localBall.transform.position = new Vector3(-ballX,ballY , 0);
         }
     }
     void ReceiveData() {
