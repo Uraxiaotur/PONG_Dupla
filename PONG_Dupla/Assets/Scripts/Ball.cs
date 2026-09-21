@@ -48,15 +48,15 @@ public class Ball : MonoBehaviour
 
     private void SetDirection()
     {
-        if (GameManager.Instance.GetScoredPlayer() == pToStart.None)
+        if (GameManager.Instance.GetScoredPlayer() == player.None)
         {
             direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-0.3f, 0.3f));   
         }
-        else if (GameManager.Instance.GetScoredPlayer() == pToStart.P1)
+        else if (GameManager.Instance.GetScoredPlayer() == player.P1)
         {
             direction = new Vector2(1f, Random.Range(-0.3f, 0.3f));   
         }
-        else if (GameManager.Instance.GetScoredPlayer() == pToStart.P2)
+        else if (GameManager.Instance.GetScoredPlayer() == player.P2)
         {
             direction = new Vector2(-1f, Random.Range(-0.3f, 0.3f));   
         }
@@ -66,31 +66,53 @@ public class Ball : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            rb.linearVelocityY = rb.linearVelocityY + (transform.position.y - collision.transform.position.y);
             direction.x *= -1f;
             speed += 0.5f;
-        }
-        else if (collision.gameObject.CompareTag("Parede"))
-        {
-            direction.y *= -1f;
         }
 
         if (collision.gameObject.CompareTag("Score1"))
         {
-            Debug.Log("P2 Pontuou");
-            rb.linearVelocity = Vector2.zero;
-            GameOM.OnPlayerScored(pToStart.P1, 1);
-            transform.position = new Vector2(0f, 0f);
-            inMovement = false;
-            speed = ogSpeed;
+            if (GameManager.Instance.P2Points > 10)
+            {
+                Debug.Log("P2 Venceu");
+                rb.linearVelocity = Vector2.zero;
+                GameOM.GameOver(0);
+                transform.position = new Vector2(0f, 0f);
+                inMovement = false;
+                speed = ogSpeed;
+            }
+            else if (GameManager.Instance.P2Points < 11)
+            {
+                Debug.Log("P2 Pontuou");
+                rb.linearVelocity = Vector2.zero;
+                GameOM.PlayerScored(player.P1);
+                transform.position = new Vector2(0f, 0f);
+                inMovement = false;
+                speed = ogSpeed;
+            }
         }
         else if (collision.gameObject.CompareTag("Score2"))
         {
-            Debug.Log("P1 Pontuou");
-            rb.linearVelocity = Vector2.zero;
-            GameOM.OnPlayerScored(pToStart.P2, 1);
-            transform.position = new Vector2(0f, 0f);
-            inMovement = false;
-            speed = ogSpeed;
+            if (GameManager.Instance.P1Points > 10)
+            {
+                Debug.Log("P1 Venceu");
+                rb.linearVelocity = Vector2.zero;
+                GameOM.GameOver(0);
+                transform.position = new Vector2(0f, 0f);
+                inMovement = false;
+                speed = ogSpeed;
+            }
+            else if (GameManager.Instance.P1Points < 11)
+            {
+                Debug.Log("P1 Pontuou");
+                rb.linearVelocity = Vector2.zero;
+                GameOM.PlayerScored(player.P2);
+                transform.position = new Vector2(0f, 0f);
+                inMovement = false;
+                speed = ogSpeed;
+            }
+           
         }
     }
     

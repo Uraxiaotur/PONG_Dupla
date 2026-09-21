@@ -1,13 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class UIPoints : MonoBehaviour
 {
     [SerializeField] private Text P1PointsText;
     [SerializeField] private Text P2PointsText;
-
-    private int P1Points;
-    private int P2Points;
     void Start()
     {
         
@@ -15,26 +13,34 @@ public class UIPoints : MonoBehaviour
 
     void OnEnable()
     {
-        GameOM.OnPlayerScored += ChangeText;
+        GameOM.OnScoreChanged += ChangeText;
+        GameOM.OnGameOver += ResetCounter;
     }
     
     void OnDisable()
     {
-        GameOM.OnPlayerScored -= ChangeText;
+        GameOM.OnScoreChanged -= ChangeText;
+        GameOM.OnGameOver -= ResetCounter;
     }
 
     // Update is called once per frame
-    void ChangeText(pToStart p, int points)
+    void ChangeText(player p, int newScore)
     {
-        if (p == pToStart.P2)
+        if (p == player.P2)
         {
-            P1Points += points;
+            int P1Points = newScore;
             P1PointsText.text = P1Points.ToString();
         }
-        else if (p == pToStart.P1)
+        else if (p == player.P1)
         {
-            P2Points += points;
+            int P2Points = newScore;
             P2PointsText.text = P2Points.ToString();
         }
+    }
+
+    void ResetCounter(int resetScore)
+    {
+        P1PointsText.text = "0";
+        P2PointsText.text = "0";
     }
 }
