@@ -75,6 +75,14 @@ public class UdpClientTwoClients : MonoBehaviour {
                     }
                 }
             }
+            else if (msg.StartsWith("BPOS:") && myId != 1)
+            {
+                string[] parts = msg.Substring(5).Split(';');
+                float  x = float.Parse(parts[0], CultureInfo.InvariantCulture);
+                float y = float.Parse(parts[1], CultureInfo.InvariantCulture);
+                
+                localBall.transform.position = new Vector3(x, y, 0);
+            }
 
             if (msg.StartsWith("BPOS:") && myId != 1)
             {
