@@ -48,29 +48,34 @@ public class UdpServerTwoClients : MonoBehaviour
                 foreach (var kvp in clientIds)
                 {
                     var parts = kvp.Key.Split(':');
-                    IPEndPoint ep = new IPEndPoint(
-                        IPAddress.Parse(parts[0]),
-                        int.Parse(parts[1])
-                    );
+                    IPEndPoint ep = new IPEndPoint(IPAddress.Parse(parts[0]), int.Parse(parts[1]));
                     server.Send(bdata, bdata.Length, ep);
                 }
             }
 
             if (msg.StartsWith("BPOS:"))
             {
-                string coords = msg.Substring(4);
+                string coords = msg.Substring(5);
                 string[] parts = coords.Split(';');
                 float x = float.Parse(parts[0], CultureInfo.InvariantCulture);
                 float y = float.Parse(parts[1], CultureInfo.InvariantCulture);
 
                 string broadcast = $"BPOS: X={x}, Y={y}";
+                byte[] bdata = Encoding.UTF8.GetBytes(broadcast);
+                
+                foreach (var kvp in clientIds)
+                {
+                    var part = kvp.Key.Split(':');
+                    IPEndPoint ep = new IPEndPoint(IPAddress.Parse(parts[0]), int.Parse(parts[1]));
+                    server.Send(bdata, bdata.Length, ep);
+                }
             }
 
             if (msg.StartsWith("QUIT:"))
             {
                 string quitMsg = msg.Substring(5);
-                string[] parts = quitMsg.Split(" ");
-                int idToRemove = int.Parse(parts[0]);
+                string[] parts = quitMsg.Split(' ');
+                int idToRemove = int.Parse(parts[1]);
 
                 Debug.Log($"Client {idToRemove} quit");
                 clientIds.Remove(idToRemove.ToString());

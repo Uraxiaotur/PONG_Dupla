@@ -18,7 +18,7 @@ public class UdpClientTwoClients : MonoBehaviour {
 
     void Start() {
         client = new UdpClient();
-        serverEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5001);
+        serverEP = new IPEndPoint(IPAddress.Parse("10.57.1.50"), 5001);
         client.Connect(serverEP);
         receiveThread = new Thread(ReceiveData);
         receiveThread.Start();
@@ -53,6 +53,7 @@ public class UdpClientTwoClients : MonoBehaviour {
     }
     void ReceiveData() {
         IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, 0);
+        
         while (true) {
             byte[] data = client.Receive(ref remoteEP);
             string msg = Encoding.UTF8.GetString(data);
@@ -68,11 +69,8 @@ public class UdpClientTwoClients : MonoBehaviour {
                     if (id != myId) {
                         float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
                         float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
-
-                        if (localBall.transform.position != Vector3.zero)
-                        {
-                            remotePos = new Vector3(x, y, 0);
-                        }
+                        remotePos = new Vector3(-x, y, 0);
+                        
                         
                     }
                 }
