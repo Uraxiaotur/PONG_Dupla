@@ -12,6 +12,9 @@ public class UdpClientTwoClients : MonoBehaviour {
     int myId = -1;
     Vector3 remotePos = Vector3.zero;
 
+    private float ballX;
+    private float ballY;
+    
     public GameObject localCube;
     public GameObject remoteCube;
     public GameObject localBall;
@@ -46,10 +49,14 @@ public class UdpClientTwoClients : MonoBehaviour {
                       localBall.transform.position.y.ToString("F2", CultureInfo.InvariantCulture);
             client.Send(Encoding.UTF8.GetBytes(msgBall), msgBall.Length);
         }
+        
+        // Atualiza posição do outro jogador e bola se o id não for 1
+        remoteCube.transform.position = Vector3.Lerp(remoteCube.transform.position, remotePos, Time.deltaTime * 10f);
 
-        // Atualiza posição do outro jogador
-        remoteCube.transform.position = Vector3.Lerp(remoteCube.transform.position, remotePos, Time.deltaTime * 10f
-        );
+        if (myId != 1)
+        {
+            localBall.transform.position = Vector3.Lerp(localBall.transform.position, new Vector3(-ballX,ballY , 0), Time.deltaTime * 10f);
+        }
     }
     void ReceiveData() {
         IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, 0);
@@ -61,9 +68,8 @@ public class UdpClientTwoClients : MonoBehaviour {
             if (msg.StartsWith("BPOS:") && myId != 1)
             {
                 string[] parts = msg.Substring(5).Split(';');
-                float ballX = float.Parse(parts[0], CultureInfo.InvariantCulture);
-                float ballY = float.Parse(parts[1], CultureInfo.InvariantCulture);
-                localBall.transform.position = Vector3.Lerp(localBall.transform.position, new Vector3(-ballX,ballY , 0), Time.deltaTime * 10f);
+                ballX = float.Parse(parts[0], CultureInfo.InvariantCulture);
+                ballY = float.Parse(parts[1], CultureInfo.InvariantCulture);
             }
 
             if (msg.StartsWith("ASSIGN:")) {
@@ -78,8 +84,6 @@ public class UdpClientTwoClients : MonoBehaviour {
                         float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
                         float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
                         remotePos = new Vector3(-x, y, 0);
-                        
-                        
                     }
                 }
             }

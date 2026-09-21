@@ -60,7 +60,7 @@ public class UdpServerTwoClients : MonoBehaviour
                 float x = float.Parse(parts[0], CultureInfo.InvariantCulture);
                 float y = float.Parse(parts[1], CultureInfo.InvariantCulture);
 
-                string broadcast = $"BPOS: X={x}; Y={y}";
+                string broadcast = $"BPOS: {x}; {y}";
                 byte[] bdata = Encoding.UTF8.GetBytes(broadcast);
                 
                 foreach (var kvp in clientIds)
