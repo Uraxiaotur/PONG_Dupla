@@ -57,6 +57,14 @@ public class UdpClientTwoClients : MonoBehaviour {
         while (true) {
             byte[] data = client.Receive(ref remoteEP);
             string msg = Encoding.UTF8.GetString(data);
+            
+            if (msg.StartsWith("BPOS:") && myId != 1)
+            {
+                string[] parts = msg.Substring(5).Split(';');
+                float ballX = float.Parse(parts[0], CultureInfo.InvariantCulture);
+                float ballY = float.Parse(parts[1], CultureInfo.InvariantCulture);
+                localBall.transform.position = Vector3.Lerp(localBall.transform.position, new Vector3(-ballX,ballY , 0), Time.deltaTime * 10f);
+            }
 
             if (msg.StartsWith("ASSIGN:")) {
                 myId = int.Parse(msg.Substring(7));
@@ -73,25 +81,6 @@ public class UdpClientTwoClients : MonoBehaviour {
                         
                         
                     }
-                }
-            }
-            else if (msg.StartsWith("BPOS:") && myId != 1)
-            {
-                string[] parts = msg.Substring(5).Split(';');
-                float  x = float.Parse(parts[0], CultureInfo.InvariantCulture);
-                float y = float.Parse(parts[1], CultureInfo.InvariantCulture);
-                
-                localBall.transform.position = new Vector3(x, y, 0);
-            }
-
-            if (msg.StartsWith("BPOS:") && myId != 1)
-            {
-                string[] parts = msg.Substring(5).Split(';');
-                if (parts.Length == 2)
-                {
-                    int ballX = int.Parse(parts[0]);
-                    int ballY = int.Parse(parts[1]);
-                    localBall.transform.position = Vector3.Lerp(localBall.transform.position, new Vector3(-ballX,ballY , 0), Time.deltaTime * 10f);
                 }
             }
         }

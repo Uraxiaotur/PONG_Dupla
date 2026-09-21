@@ -50,15 +50,15 @@ public class Ball : MonoBehaviour
     {
         if (GameManager.Instance.GetScoredPlayer() == pToStart.None)
         {
-            direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f));   
+            direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-0.3f, 0.3f));   
         }
         else if (GameManager.Instance.GetScoredPlayer() == pToStart.P1)
         {
-            direction = new Vector2(1f, Random.Range(-0.5f, 0.5f));   
+            direction = new Vector2(1f, Random.Range(-0.3f, 0.3f));   
         }
         else if (GameManager.Instance.GetScoredPlayer() == pToStart.P2)
         {
-            direction = new Vector2(-1f, Random.Range(-0.5f, 0.5f));   
+            direction = new Vector2(-1f, Random.Range(-0.3f, 0.3f));   
         }
     }
 
