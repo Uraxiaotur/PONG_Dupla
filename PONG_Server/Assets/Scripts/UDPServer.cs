@@ -66,7 +66,7 @@ public class UdpServerTwoClients : MonoBehaviour
                 foreach (var kvp in clientIds)
                 {
                     var part = kvp.Key.Split(':');
-                    IPEndPoint ep = new IPEndPoint(IPAddress.Parse(parts[0]), int.Parse(parts[1]));
+                    IPEndPoint ep = new IPEndPoint(IPAddress.Parse(part[0]), int.Parse(part[1]));
                     server.Send(bdata, bdata.Length, ep);
                 }
             }
