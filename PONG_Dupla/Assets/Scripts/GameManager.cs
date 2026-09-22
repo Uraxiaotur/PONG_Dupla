@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     
     public int P1Points;
     public int P2Points;
-    public player pToStart;
+    public pToStart pToStart;
 
     private bool gameStarted;
     void Awake()
@@ -40,36 +40,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void IncreasePoints(player p)
+    public void IncreasePoints(pToStart p, int points)
     {
-        if (P1Points == 11)
+        if (p == pToStart.P1)
         {
-            P1Points = 0;
-            P2Points = 0;
-            GameOM.GameOver(0);
+            pToStart = pToStart.P2;
+            P1Points += 1;
         }
-        else if (P2Points == 11)
+        else if (p == pToStart.P2)
         {
-            P1Points = 0;
-            P2Points = 0;
-            GameOM.GameOver(0);
+            pToStart = pToStart.P1;
+            P2Points += 1;
         }
 
-        if (p == player.P1)
+        if (P1Points == 10)
         {
-            pToStart = player.P2;
-            P2Points += 1;
-            GameOM.ScoreChanged(player.P2, P2Points);
+            GameOM.OnGameOver(pToStart.P1);
         }
-        else if (p == player.P2)
+        else if (P2Points == 10)
         {
-            pToStart = player.P1;
-            P1Points += 1;
-            GameOM.ScoreChanged(player.P1, P1Points);       
+            GameOM.OnGameOver(pToStart.P2);
         }
     }
 
-    public player GetScoredPlayer()
+    public pToStart GetScoredPlayer()
     {
         return pToStart;
     }

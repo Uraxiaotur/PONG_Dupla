@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public enum player
+public enum pToStart
 {
     None,
     P1,
@@ -10,30 +10,24 @@ public enum player
 
 public class GameOM
 {
-    public static event Action OnGameStart;
+    public static Action OnGameStart;
 
     public static void StartGame()
     {
         OnGameStart?.Invoke();
     }
     
-    public static event Action<player> OnPlayerScored;
+    public static Action<pToStart, int> OnPlayerScored;
 
-    public static void PlayerScored(player p)
+    public static void PlayerScored(pToStart p, int score)
     {
-        OnPlayerScored?.Invoke(p);
+        OnPlayerScored?.Invoke(p, score);
     }
     
-    public static event Action<int> OnGameOver;
-    public static void GameOver(int resetScore)
+    public static Action<pToStart> OnGameOver;
+    public static void GameOver(pToStart p)
     {
-        OnGameOver?.Invoke(resetScore);
+        OnGameOver?.Invoke(p);
     }
-
-    public static event Action<player, int> OnScoreChanged;
-    public static void ScoreChanged(player p,int newScore)
-    {
-        OnScoreChanged?.Invoke(p, newScore);
-    }
-
+    
 }
