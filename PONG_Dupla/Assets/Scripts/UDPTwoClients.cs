@@ -11,6 +11,9 @@ public class UdpClientTwoClients : MonoBehaviour {
     IPEndPoint serverEP;
     int myId = -1;
     Vector3 remotePos = Vector3.zero;
+    
+    private float ballX;
+    private float ballY;
 
     public string serverIp;
     public GameObject localCube;
@@ -49,6 +52,11 @@ public class UdpClientTwoClients : MonoBehaviour {
         }
 
         // Atualiza posição do outro jogador
+        if (myId != 1)
+        {
+            localBall.transform.position = new Vector3(-ballX,ballY , 0);
+        }
+        
         remoteCube.transform.position = Vector3.Lerp(remoteCube.transform.position, remotePos, Time.deltaTime * 10f
         );
     }
@@ -58,6 +66,13 @@ public class UdpClientTwoClients : MonoBehaviour {
             byte[] data = client.Receive(ref remoteEP);
             string msg = Encoding.UTF8.GetString(data);
 
+            if (msg.StartsWith("BPOS:") && myId != 1)
+            {
+                string[] parts = msg.Substring(5).Split(';');
+                ballX = float.Parse(parts[0], CultureInfo.InvariantCulture);
+                ballY = float.Parse(parts[1], CultureInfo.InvariantCulture);
+            }
+            
             if (msg.StartsWith("ASSIGN:")) {
                 myId = int.Parse(msg.Substring(7));
                 Debug.Log("[Cliente] Meu ID = " + myId);
@@ -69,24 +84,8 @@ public class UdpClientTwoClients : MonoBehaviour {
                     if (id != myId) {
                         float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
                         float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
-
-                        if (localBall.transform.position != Vector3.zero)
-                        {
-                            remotePos = new Vector3(x, y, 0);
-                        }
-                        
+                        remotePos = new Vector3(-x, y, 0);
                     }
-                }
-            }
-
-            if (msg.StartsWith("BPOS:") && myId != 1)
-            {
-                string[] parts = msg.Substring(5).Split(';');
-                if (parts.Length == 2)
-                {
-                    int ballX = int.Parse(parts[0]);
-                    int ballY = int.Parse(parts[1]);
-                    localBall.transform.position = Vector3.Lerp(localBall.transform.position, new Vector3(-ballX,ballY , 0), Time.deltaTime * 10f);
                 }
             }
         }
