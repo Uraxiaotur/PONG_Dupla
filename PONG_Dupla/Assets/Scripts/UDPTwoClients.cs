@@ -11,18 +11,17 @@ public class UdpClientTwoClients : MonoBehaviour {
     IPEndPoint serverEP;
     int myId = -1;
     Vector3 remotePos = Vector3.zero;
-    
+
     private float ballX;
     private float ballY;
-
-    public string serverIp;
+    
     public GameObject localCube;
     public GameObject remoteCube;
     public GameObject localBall;
 
     void Start() {
         client = new UdpClient();
-        serverEP = new IPEndPoint(IPAddress.Parse(serverIp), 5001);
+        serverEP = new IPEndPoint(IPAddress.Parse("10.57.1.50"), 5001);
         client.Connect(serverEP);
         receiveThread = new Thread(ReceiveData);
         receiveThread.Start();
@@ -50,29 +49,29 @@ public class UdpClientTwoClients : MonoBehaviour {
                       localBall.transform.position.y.ToString("F2", CultureInfo.InvariantCulture);
             client.Send(Encoding.UTF8.GetBytes(msgBall), msgBall.Length);
         }
+        
+        // Atualiza posição do outro jogador e bola se o id não for 1
+        remoteCube.transform.position = Vector3.Lerp(remoteCube.transform.position, remotePos, Time.deltaTime * 10f);
 
-        // Atualiza posição do outro jogador
         if (myId != 1)
         {
             localBall.transform.position = new Vector3(-ballX,ballY , 0);
         }
-        
-        remoteCube.transform.position = Vector3.Lerp(remoteCube.transform.position, remotePos, Time.deltaTime * 10f
-        );
     }
     void ReceiveData() {
         IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, 0);
+        
         while (true) {
             byte[] data = client.Receive(ref remoteEP);
             string msg = Encoding.UTF8.GetString(data);
-
+            
             if (msg.StartsWith("BPOS:") && myId != 1)
             {
                 string[] parts = msg.Substring(5).Split(';');
                 ballX = float.Parse(parts[0], CultureInfo.InvariantCulture);
                 ballY = float.Parse(parts[1], CultureInfo.InvariantCulture);
             }
-            
+
             if (msg.StartsWith("ASSIGN:")) {
                 myId = int.Parse(msg.Substring(7));
                 Debug.Log("[Cliente] Meu ID = " + myId);
